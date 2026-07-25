@@ -31,19 +31,24 @@ https://github.com/YOUR-USERNAME/shell-scripting.git
 
 ## 3. Go to Your Projects Folder
 
-cd /c/nit
-
+``bash
+cd /c/local-repo
+```
 ## 4. Clone Your Fork
 
+```bash
 git clone git@github.com:YOUR-USERNAME/shell-scripting.git
 cd shell-scripting
+```
 
 ## 5. Complete Your Assignment
 
 Example:
 
+```bash
 mkdir -p assignments/day-04/your-name
 touch assignments/day-04/your-name/day-04.sh
+```
 
 Create files, folders, test your scripts.
 
@@ -58,32 +63,40 @@ Update branch
 
 ## 7. Save Your Local Work
 
+```bash
 git status
 git add .
 git commit -m "Add my Day 04 assignment"
+```
 
 ## 8. Update Your Local Repository
 
+```bash
 git pull --rebase origin main
+```
 
 This downloads the latest changes from your fork and reapplies your local commit.
 
 ## 9. Push Your Changes
 
+```bash
 git push origin main
-
+```
 or
 
+```bash
 git push
-
+```
 ## Complete Workflow
 
-cd /c/nit
+```bash
+cd /c/local-repo
 git clone git@github.com:YOUR-USERNAME/shell-scripting.git
 cd shell-scripting
-
+```
 # Work
 
+```bash
 git status
 git add .
 git commit -m "Add my Day 04 assignment"
@@ -92,6 +105,7 @@ git commit -m "Add my Day 04 assignment"
 
 git pull --rebase origin main
 git push origin main
+```
 
 ## Best Practices
 
