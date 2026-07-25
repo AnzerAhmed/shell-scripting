@@ -31,7 +31,7 @@ https://github.com/YOUR-USERNAME/shell-scripting.git
 
 ## 3. Go to Your Projects Folder
 
-``bash
+```bash
 cd /c/local-repo
 ```
 ## 4. Clone Your Fork
