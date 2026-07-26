@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive 25-question Bash variables quiz with answer checking, timer, scoring, explanations, topic analysis, and shuffled reattempts.">
+  <title>Bash Variables — From Scratch to Advanced | 25 MCQ Quiz</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #06111e;
+      --surface: #0d1c2e;
+      --surface-2: #132740;
+      --surface-3: #091728;
+      --text: #f3f8ff;
+      --muted: #a8b8cd;
+      --green: #94e22b;
+      --cyan: #1fc8e5;
+      --orange: #ffae28;
+      --success: #35d49a;
+      --danger: #ff6f82;
+      --warning: #ffd166;
+      --border: #29445f;
+      --shadow: 0 20px 55px rgb(0 0 0 / 32%);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      background:
+        linear-gradient(rgb(31 200 229 / 4%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(31 200 229 / 4%) 1px, transparent 1px),
+        radial-gradient(circle at 10% 0%, rgb(148 226 43 / 13%), transparent 28rem),
+        radial-gradient(circle at 90% 5%, rgb(31 200 229 / 15%), transparent 30rem),
+        var(--bg);
+      background-size: 36px 36px, 36px 36px, auto, auto, auto;
+    }
+
+    button, input { font: inherit; }
+    button:focus-visible, input:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    .container {
+      width: min(1040px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 60px;
+    }
+
+    .hero, .toolbar, .question-card, .result-card, .review-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgb(13 28 46 / 95%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 42px);
+    }
+
+    .hero::after {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      content: "${ }";
+      color: rgb(148 226 43 / 9%);
+      font: 900 clamp(4rem, 15vw, 9rem)/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 3.65rem);
+      line-height: 1.08;
+    }
+
+    h1 span { color: var(--cyan); }
+
+    .hero-description {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 16px 0 0;
+      color: var(--muted);
+    }
+
+    .topic-chips {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .chip {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: #d9e8fa;
+      background: var(--surface-3);
+      font-size: .79rem;
+      font-weight: 750;
+    }
+
+    .stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-2);
+    }
+
+    .stat span { display: block; color: var(--muted); font-size: .76rem; }
+    .stat strong { display: block; margin-top: 2px; font-size: 1.05rem; }
+
+    .toolbar {
+      position: sticky;
+      top: 8px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) auto auto;
+      gap: 18px;
+      align-items: center;
+      margin: 18px 0;
+      padding: 14px 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .progress-track, .mini-track {
+      overflow: hidden;
+      border-radius: 999px;
+      background: #06111e;
+    }
+
+    .progress-track {
+      height: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .progress-bar, .mini-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+    }
+
+    .progress-bar { width: 0; transition: width .25s ease; }
+    .toolbar-label { margin-top: 5px; color: var(--muted); font-size: .8rem; }
+    .timer { font-weight: 950; font-variant-numeric: tabular-nums; }
+    .timer.warning { color: var(--warning); }
+    .status { color: var(--cyan); font-weight: 850; }
+
+    .question-card {
+      scroll-margin-top: 96px;
+      margin-bottom: 16px;
+      padding: 22px;
+    }
+
+    .question-card.unanswered {
+      border-color: var(--warning);
+      box-shadow: 0 0 0 2px rgb(255 209 102 / 14%), var(--shadow);
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    .question-number { color: var(--green); font-weight: 900; }
+    .category {
+      padding: 4px 9px;
+      border: 1px solid rgb(31 200 229 / 35%);
+      border-radius: 999px;
+      color: var(--cyan);
+      background: rgb(31 200 229 / 7%);
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+    .question-card h2 { margin: 0 0 16px; font-size: clamp(1rem, 3vw, 1.15rem); }
+    code { color: #c6f68b; font: .94em ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .options { display: grid; gap: 10px; }
+
+    .option {
+      display: grid;
+      grid-template-columns: auto auto 1fr;
+      gap: 11px;
+      align-items: start;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-3);
+      cursor: pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+
+    .option:hover { transform: translateY(-1px); border-color: var(--cyan); }
+    .option:has(input:checked) { border-color: var(--green); background: rgb(29 65 65 / 78%); }
+    .option.correct { border-color: var(--success); background: rgb(21 101 74 / 42%); }
+    .option.incorrect { border-color: var(--danger); background: rgb(132 31 55 / 40%); }
+    .option input { margin-top: 4px; accent-color: var(--green); }
+    .option-letter { color: var(--muted); font-weight: 900; }
+
+    .explanation {
+      display: none;
+      margin-top: 14px;
+      padding: 13px 15px;
+      border-left: 4px solid var(--cyan);
+      border-radius: 8px;
+      color: var(--muted);
+      background: #071524;
+    }
+
+    .explanation.show { display: block; }
+    .explanation strong { color: var(--text); }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 28px 0;
+    }
+
+    .button {
+      min-width: 170px;
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .12s ease, filter .12s ease;
+    }
+
+    .button:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.07); }
+    .button:disabled { opacity: .48; cursor: not-allowed; }
+    .primary { color: #04121a; background: linear-gradient(135deg, var(--green), var(--cyan)); }
+    .secondary { color: var(--text); border: 1px solid var(--border); background: var(--surface-2); }
+
+    .result-card { display: none; padding: clamp(22px, 5vw, 34px); margin: 20px 0; text-align: center; }
+    .result-card.show, .review-card.show { display: block; }
+    .score { color: var(--green); font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 950; line-height: 1; }
+    .result-message { max-width: 720px; margin: 10px auto 0; color: var(--muted); }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 720px;
+      margin: 22px auto 0;
+    }
+
+    .result-stat { padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-3); }
+    .result-stat span { display: block; color: var(--muted); font-size: .73rem; }
+    .result-stat strong { font-size: 1.05rem; }
+    .review-card { display: none; padding: 24px; margin: 16px 0; }
+    .review-card h2 { margin-top: 0; }
+    .category-results { display: grid; gap: 12px; }
+
+    .category-row {
+      display: grid;
+      grid-template-columns: minmax(170px, 1fr) 2fr auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mini-track { height: 9px; }
+    .review-note { margin: 16px 0 0; color: var(--muted); font-size: .88rem; }
+    footer { padding-top: 26px; text-align: center; color: var(--muted); }
+    footer a { color: var(--cyan); }
+
+    @media (max-width: 760px) {
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stats .stat:last-child { grid-column: 1 / -1; }
+      .toolbar { grid-template-columns: 1fr auto; gap: 10px; }
+      .toolbar > div:first-child { grid-column: 1 / -1; }
+      .result-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .category-row { grid-template-columns: 1fr auto; }
+      .category-row .mini-track { grid-column: 1 / -1; grid-row: 2; }
+    }
+
+    @media print {
+      body { color: #111; background: #fff; }
+      .hero, .question-card, .result-card, .review-card { color: #111; background: #fff; box-shadow: none; }
+      .toolbar, .actions { display: none; }
+      .question-card { break-inside: avoid; }
+      .option { color: #111; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">Bash Scripting · Variables</p>
+      <h1>Variables <span>From Scratch to Advanced</span></h1>
+      <p class="hero-description">Test variable assignment, quotes, input, arguments, command substitution, arithmetic, environment variables, parameter expansion, string tools, and safe DevOps practices. Questions and choices shuffle on every attempt.</p>
+
+      <div class="topic-chips" aria-label="Quiz topics">
+        <span class="chip">Assignment & Quotes</span>
+        <span class="chip">Input &amp; Arguments</span>
+        <span class="chip">Commands &amp; Arithmetic</span>
+        <span class="chip">Environment &amp; Defaults</span>
+        <span class="chip">String Tools &amp; Safety</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span>Questions</span><strong>25</strong></div>
+        <div class="stat"><span>Time limit</span><strong>25 minutes</strong></div>
+        <div class="stat"><span>Passing score</span><strong>80%</strong></div>
+        <div class="stat"><span>Attempt</span><strong id="attemptNumber">1</strong></div>
+        <div class="stat"><span>Best score</span><strong id="bestScore">Not attempted</strong></div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Quiz status">
+      <div>
+        <div class="progress-track" role="progressbar" aria-label="Answered questions" aria-valuemin="0" aria-valuemax="25" aria-valuenow="0" id="progressTrack">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="toolbar-label" id="progressLabel">0 of 25 answered</div>
+      </div>
+      <div>Time: <span class="timer" id="timer">25:00</span></div>
+      <div class="status" id="statusLabel">In progress</div>
+    </section>
+
+    <form id="quizForm" novalidate></form>
+
+    <div class="actions">
+      <button class="button primary" id="submitButton" type="button">Submit Quiz</button>
+      <button class="button secondary" id="reattemptButton" type="button">Reattempt &amp; Shuffle</button>
+    </div>
+
+    <section class="result-card" id="resultCard" aria-live="polite">
+      <p class="eyebrow">Your Result</p>
+      <div class="score" id="scoreText">0%</div>
+      <h2 id="scoreDetail"></h2>
+      <p class="result-message" id="resultMessage"></p>
+      <div class="result-grid">
+        <div class="result-stat"><span>Correct</span><strong id="correctResult">0</strong></div>
+        <div class="result-stat"><span>Incorrect</span><strong id="incorrectResult">0</strong></div>
+        <div class="result-stat"><span>Unanswered</span><strong id="unansweredResult">0</strong></div>
+        <div class="result-stat"><span>Time used</span><strong id="timeUsedResult">00:00</strong></div>
+      </div>
+    </section>
+
+    <section class="review-card" id="reviewCard">
+      <h2>Performance by Topic</h2>
+      <div class="category-results" id="categoryResults"></div>
+      <p class="review-note">Review the highlighted answers and explanations. Then select “Reattempt &amp; Shuffle” for a fresh question and answer order.</p>
+    </section>
+
+    <footer>
+      <p>Prepared for Muhammad Khalid Khan · Bash Scripting Learning Series</p>
+    </footer>
+  </main>
+
+  <script>
+    const quizData = [
+          {
+                "category": "Fundamentals",
+                "q": "Which line correctly creates a Bash variable?",
+                "options": [
+                      "name=\"Ali\"",
+                      "name = \"Ali\"",
+                      "$name=\"Ali\"",
+                      "variable name=\"Ali\""
+                ],
+                "answer": "name=\"Ali\"",
+                "explanation": "Bash variable assignment uses name=value with no spaces around the equals sign."
+          },
+          {
+                "category": "Fundamentals",
+                "q": "How do you display the value stored in <code>name</code>?",
+                "options": [
+                      "echo \"$name\"",
+                      "echo \"name\"",
+                      "echo \"=name\"",
+                      "read \"$name\""
+                ],
+                "answer": "echo \"$name\"",
+                "explanation": "The dollar sign expands the variable, and double quotes keep its complete value together."
+          },
+          {
+                "category": "Fundamentals",
+                "q": "Why is <code>echo \"${fruit}s\"</code> useful?",
+                "options": [
+                      "Braces clearly separate the variable name from the following s",
+                      "Braces export the variable",
+                      "Braces make fruit read-only",
+                      "Braces remove spaces from the value"
+                ],
+                "answer": "Braces clearly separate the variable name from the following s",
+                "explanation": "Without braces, Bash would look for a different variable named fruits."
+          },
+          {
+                "category": "Fundamentals",
+                "q": "Which is a valid Bash variable name?",
+                "options": [
+                      "student_name",
+                      "2student",
+                      "student-name",
+                      "student name"
+                ],
+                "answer": "student_name",
+                "explanation": "A variable name may use letters, digits, and underscores, but it cannot start with a digit."
+          },
+          {
+                "category": "Fundamentals",
+                "q": "What does <code>echo '$name'</code> print?",
+                "options": [
+                      "The literal text $name",
+                      "The value stored in name",
+                      "Nothing",
+                      "Only the dollar sign"
+                ],
+                "answer": "The literal text $name",
+                "explanation": "Single quotes prevent variable expansion, so the text inside them is printed literally."
+          },
+          {
+                "category": "Input & Arguments",
+                "q": "Why is <code>read -r</code> preferred for normal user input?",
+                "options": [
+                      "It prevents backslashes from being treated as escape characters",
+                      "It makes the input read-only",
+                      "It automatically validates numbers",
+                      "It runs the input as root"
+                ],
+                "answer": "It prevents backslashes from being treated as escape characters",
+                "explanation": "The -r option preserves backslashes and is the safer default for reading ordinary input."
+          },
+          {
+                "category": "Input & Arguments",
+                "q": "Which command hides a practice token while the user types it?",
+                "options": [
+                      "read -r -s -p \"Token: \" token",
+                      "read -r -p \"Token: \" token",
+                      "echo \"$token\"",
+                      "export token"
+                ],
+                "answer": "read -r -s -p \"Token: \" token",
+                "explanation": "The -s option disables terminal echo, while -r preserves backslashes and -p displays the prompt."
+          },
+          {
+                "category": "Input & Arguments",
+                "q": "What does <code>$0</code> normally contain inside a script?",
+                "options": [
+                      "The script name or path used to start it",
+                      "The first user argument",
+                      "The number of arguments",
+                      "The previous exit status"
+                ],
+                "answer": "The script name or path used to start it",
+                "explanation": "Positional parameter $0 identifies how the script or shell was invoked."
+          },
+          {
+                "category": "Input & Arguments",
+                "q": "What does <code>$#</code> contain?",
+                "options": [
+                      "The number of positional arguments",
+                      "All arguments as one string",
+                      "The current process ID",
+                      "The last background process ID"
+                ],
+                "answer": "The number of positional arguments",
+                "explanation": "Use $# to validate how many arguments the user supplied before reading $1, $2, and others."
+          },
+          {
+                "category": "Input & Arguments",
+                "q": "Which expansion safely preserves all positional arguments as separate values?",
+                "options": [
+                      "\"$@\"",
+                      "\"$*\"",
+                      "$#",
+                      "$0"
+                ],
+                "answer": "\"$@\"",
+                "explanation": "Quoted \"$@\" expands each positional argument separately and preserves spaces inside individual arguments."
+          },
+          {
+                "category": "Commands & Arithmetic",
+                "q": "What does <code>current_user=\"$(whoami)\"</code> do?",
+                "options": [
+                      "Stores the output of whoami in current_user",
+                      "Runs a user named current_user",
+                      "Exports whoami to every process",
+                      "Compares current_user with whoami"
+                ],
+                "answer": "Stores the output of whoami in current_user",
+                "explanation": "The $(command) syntax performs command substitution and captures standard output."
+          },
+          {
+                "category": "Commands & Arithmetic",
+                "q": "Which form is recommended for command substitution?",
+                "options": [
+                      "value=\"$(command)\"",
+                      "value=\"`command`\" only",
+                      "value=\"$command()\"",
+                      "value=\"{command}\""
+                ],
+                "answer": "value=\"$(command)\"",
+                "explanation": "$(command) is easier to read and nest than legacy backticks."
+          },
+          {
+                "category": "Commands & Arithmetic",
+                "q": "Which line adds <code>apples</code> and <code>bananas</code>?",
+                "options": [
+                      "total=$((apples + bananas))",
+                      "total=$(apples + bananas)",
+                      "total=\"apples + bananas\"",
+                      "total=$apples+$bananas"
+                ],
+                "answer": "total=$((apples + bananas))",
+                "explanation": "Arithmetic expansion uses $(( )) and stores the calculated integer result in total."
+          },
+          {
+                "category": "Commands & Arithmetic",
+                "q": "After <code>count=4</code>, what does <code>count=$((count + 1))</code> store?",
+                "options": [
+                      "5",
+                      "41",
+                      "4 + 1",
+                      "count + 1"
+                ],
+                "answer": "5",
+                "explanation": "Arithmetic expansion evaluates the expression numerically, so four plus one becomes five."
+          },
+          {
+                "category": "Commands & Arithmetic",
+                "q": "Why should <code>status=$?</code> be written immediately after the command being checked?",
+                "options": [
+                      "The next command replaces the previous exit status",
+                      "The value disappears after one second",
+                      "The value is always a string",
+                      "Only root can read it later"
+                ],
+                "answer": "The next command replaces the previous exit status",
+                "explanation": "$? always represents the most recently completed foreground command or pipeline."
+          },
+          {
+                "category": "Environment & Defaults",
+                "q": "What does <code>export APP_ENV=\"testing\"</code> do?",
+                "options": [
+                      "Makes APP_ENV available to child processes",
+                      "Makes APP_ENV permanent after reboot",
+                      "Encrypts APP_ENV",
+                      "Makes the variable read-only"
+                ],
+                "answer": "Makes APP_ENV available to child processes",
+                "explanation": "export places the variable in the environment inherited by commands started from the current shell."
+          },
+          {
+                "category": "Environment & Defaults",
+                "q": "What is special about <code>APP_ENV=\"testing\" bash app.sh</code>?",
+                "options": [
+                      "APP_ENV is supplied to that command invocation",
+                      "APP_ENV is permanently saved in /etc/environment",
+                      "app.sh becomes executable",
+                      "Bash ignores APP_ENV"
+                ],
+                "answer": "APP_ENV is supplied to that command invocation",
+                "explanation": "A leading assignment provides an environment value for that command without requiring a lasting shell change."
+          },
+          {
+                "category": "Environment & Defaults",
+                "q": "What does <code>${name:-guest}</code> return when <code>name</code> is unset or empty?",
+                "options": [
+                      "guest",
+                      "An error",
+                      "An empty string only",
+                      "The literal text name"
+                ],
+                "answer": "guest",
+                "explanation": "The :- operator supplies a fallback but does not assign it to the original variable."
+          },
+          {
+                "category": "Environment & Defaults",
+                "q": "How does <code>${name:=guest}</code> differ from <code>${name:-guest}</code>?",
+                "options": [
+                      "It assigns guest to name when name is unset or empty",
+                      "It makes name read-only",
+                      "It removes name",
+                      "It exports name"
+                ],
+                "answer": "It assigns guest to name when name is unset or empty",
+                "explanation": "The := form both produces the default value and stores it in the variable."
+          },
+          {
+                "category": "Environment & Defaults",
+                "q": "What is the purpose of <code>: \"${DEPLOY_ENV:?DEPLOY_ENV is required}\"</code>?",
+                "options": [
+                      "Stop with an error when DEPLOY_ENV is missing or empty",
+                      "Set DEPLOY_ENV to development",
+                      "Print every environment variable",
+                      "Delete DEPLOY_ENV"
+                ],
+                "answer": "Stop with an error when DEPLOY_ENV is missing or empty",
+                "explanation": "The :? expansion enforces a required value and displays the supplied error message."
+          },
+          {
+                "category": "String Tools & Safety",
+                "q": "What does <code>${#username}</code> produce?",
+                "options": [
+                      "The number of characters in username",
+                      "The number of script arguments",
+                      "The username in uppercase",
+                      "The process ID"
+                ],
+                "answer": "The number of characters in username",
+                "explanation": "The # before a parameter name returns the string length."
+          },
+          {
+                "category": "String Tools & Safety",
+                "q": "If <code>path=\"/var/log/app.log\"</code>, what does <code>${path##*/}</code> produce?",
+                "options": [
+                      "app.log",
+                      "/var/log",
+                      "log/app.log",
+                      "app"
+                ],
+                "answer": "app.log",
+                "explanation": "## removes the longest matching */ prefix, leaving only the filename."
+          },
+          {
+                "category": "String Tools & Safety",
+                "q": "If <code>file=\"app.log\"</code>, what does <code>${file%.*}</code> produce?",
+                "options": [
+                      "app",
+                      "log",
+                      "app.log",
+                      "*.log"
+                ],
+                "answer": "app",
+                "explanation": "% removes the shortest matching suffix, so .* removes the final extension."
+          },
+          {
+                "category": "String Tools & Safety",
+                "q": "What happens after <code>readonly MAX_RETRIES=3</code>?",
+                "options": [
+                      "Changing MAX_RETRIES later produces an error",
+                      "MAX_RETRIES is exported automatically",
+                      "MAX_RETRIES is deleted after three uses",
+                      "Only root can read MAX_RETRIES"
+                ],
+                "answer": "Changing MAX_RETRIES later produces an error",
+                "explanation": "readonly protects the variable from reassignment or unsetting in the current shell."
+          },
+          {
+                "category": "String Tools & Safety",
+                "q": "Which is the safest practice for a secret stored temporarily in a variable?",
+                "options": [
+                      "Do not print it, avoid tracing it, and unset it when finished",
+                      "Put it directly in the script and commit it",
+                      "Pass it in every command-line argument",
+                      "Display it with echo for verification"
+                ],
+                "answer": "Do not print it, avoid tracing it, and unset it when finished",
+                "explanation": "Variables are not automatically secure; production secrets should come from an appropriate secret-management system."
+          }
+    ];
+
+    const QUIZ_SECONDS = 25 * 60;
+    const STORAGE_KEY = "bash-variables-advanced-best-score";
+    const ATTEMPT_KEY = "bash-variables-advanced-attempt-count";
+    const letters = ["A", "B", "C", "D"];
+
+    const state = {
+      questions: [],
+      secondsRemaining: QUIZ_SECONDS,
+      timerId: null,
+      submitted: false,
+      attempt: 0
+    };
+
+    const quizForm = document.getElementById("quizForm");
+    const progressTrack = document.getElementById("progressTrack");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const timerElement = document.getElementById("timer");
+    const statusLabel = document.getElementById("statusLabel");
+    const submitButton = document.getElementById("submitButton");
+    const reattemptButton = document.getElementById("reattemptButton");
+    const resultCard = document.getElementById("resultCard");
+    const reviewCard = document.getElementById("reviewCard");
+    const scoreText = document.getElementById("scoreText");
+    const scoreDetail = document.getElementById("scoreDetail");
+    const resultMessage = document.getElementById("resultMessage");
+    const correctResult = document.getElementById("correctResult");
+    const incorrectResult = document.getElementById("incorrectResult");
+    const unansweredResult = document.getElementById("unansweredResult");
+    const timeUsedResult = document.getElementById("timeUsedResult");
+    const categoryResults = document.getElementById("categoryResults");
+    const bestScore = document.getElementById("bestScore");
+    const attemptNumber = document.getElementById("attemptNumber");
+
+    function shuffle(items) {
+      const result = [...items];
+      for (let index = result.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+      }
+      return result;
+    }
+
+    function formatTime(totalSeconds) {
+      const safeSeconds = Math.max(0, totalSeconds);
+      const minutes = Math.floor(safeSeconds / 60);
+      const seconds = safeSeconds % 60;
+      return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function loadSavedProgress() {
+      try {
+        const savedBest = window.localStorage.getItem(STORAGE_KEY);
+        bestScore.textContent = savedBest === null ? "Not attempted" : `${savedBest}%`;
+        state.attempt = Number(window.localStorage.getItem(ATTEMPT_KEY) || 0);
+      } catch (error) {
+        bestScore.textContent = "This session only";
+      }
+    }
+
+    function saveBestScore(percentage) {
+      try {
+        const previous = Number(window.localStorage.getItem(STORAGE_KEY) || 0);
+        if (percentage > previous) window.localStorage.setItem(STORAGE_KEY, String(percentage));
+        const saved = window.localStorage.getItem(STORAGE_KEY);
+        bestScore.textContent = saved === null ? `${percentage}%` : `${saved}%`;
+      } catch (error) {
+        bestScore.textContent = `${percentage}%`;
+      }
+    }
+
+    function saveAttempt() {
+      state.attempt += 1;
+      attemptNumber.textContent = String(state.attempt);
+      try {
+        window.localStorage.setItem(ATTEMPT_KEY, String(state.attempt));
+      } catch (error) {
+        // The quiz still works when storage is unavailable.
+      }
+    }
+
+    function createAttempt(shouldScroll = true) {
+      clearInterval(state.timerId);
+      saveAttempt();
+      state.questions = shuffle(quizData).map((question) => ({
+        ...question,
+        options: shuffle(question.options)
+      }));
+      state.secondsRemaining = QUIZ_SECONDS;
+      state.submitted = false;
+      resultCard.classList.remove("show");
+      reviewCard.classList.remove("show");
+      submitButton.disabled = false;
+      statusLabel.textContent = "In progress";
+      renderQuestions();
+      updateProgress();
+      updateTimer();
+      state.timerId = window.setInterval(tick, 1000);
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderQuestions() {
+      quizForm.innerHTML = "";
+
+      state.questions.forEach((question, questionIndex) => {
+        const card = document.createElement("section");
+        card.className = "question-card";
+        card.dataset.questionIndex = questionIndex;
+
+        const meta = document.createElement("div");
+        meta.className = "question-meta";
+
+        const number = document.createElement("span");
+        number.className = "question-number";
+        number.textContent = `Question ${questionIndex + 1} of ${state.questions.length}`;
+
+        const category = document.createElement("span");
+        category.className = "category";
+        category.textContent = question.category;
+        meta.append(number, category);
+
+        const heading = document.createElement("h2");
+        heading.innerHTML = question.q;
+
+        const options = document.createElement("div");
+        options.className = "options";
+
+        question.options.forEach((optionText, optionIndex) => {
+          const label = document.createElement("label");
+          label.className = "option";
+          label.dataset.option = optionText;
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `question-${questionIndex}`;
+          input.value = optionText;
+          input.id = `question-${questionIndex}-option-${optionIndex}`;
+          input.addEventListener("change", () => {
+            card.classList.remove("unanswered");
+            updateProgress();
+          });
+
+          const letter = document.createElement("span");
+          letter.className = "option-letter";
+          letter.textContent = `${letters[optionIndex]}.`;
+
+          const text = document.createElement("span");
+          text.textContent = optionText;
+          label.append(input, letter, text);
+          options.append(label);
+        });
+
+        const explanation = document.createElement("div");
+        explanation.className = "explanation";
+        explanation.innerHTML = `<strong>Explanation:</strong> ${question.explanation}`;
+        card.append(meta, heading, options, explanation);
+        quizForm.append(card);
+      });
+    }
+
+    function updateProgress() {
+      const answered = quizForm.querySelectorAll('input[type="radio"]:checked').length;
+      const percentage = (answered / state.questions.length) * 100;
+      progressBar.style.width = `${percentage}%`;
+      progressTrack.setAttribute("aria-valuenow", String(answered));
+      progressLabel.textContent = `${answered} of ${state.questions.length} answered`;
+    }
+
+    function updateTimer() {
+      timerElement.textContent = formatTime(state.secondsRemaining);
+      timerElement.classList.toggle("warning", state.secondsRemaining <= 300);
+    }
+
+    function tick() {
+      state.secondsRemaining -= 1;
+      updateTimer();
+      if (state.secondsRemaining <= 0) {
+        clearInterval(state.timerId);
+        submitQuiz(true);
+      }
+    }
+
+    function highlightUnanswered() {
+      const unansweredCards = [];
+      state.questions.forEach((question, index) => {
+        const card = quizForm.querySelector(`[data-question-index="${index}"]`);
+        if (!card.querySelector('input[type="radio"]:checked')) {
+          card.classList.add("unanswered");
+          unansweredCards.push(card);
+        }
+      });
+      return unansweredCards;
+    }
+
+    function buildCategoryReport(categoryStats) {
+      categoryResults.innerHTML = "";
+      Object.entries(categoryStats)
+        .sort(([first], [second]) => first.localeCompare(second))
+        .forEach(([name, stats]) => {
+          const percentage = Math.round((stats.correct / stats.total) * 100);
+          const row = document.createElement("div");
+          row.className = "category-row";
+          row.innerHTML = `
+            <strong>${name}</strong>
+            <div class="mini-track" aria-label="${name}: ${percentage}%">
+              <div class="mini-bar" style="width: ${percentage}%"></div>
+            </div>
+            <span>${stats.correct}/${stats.total}</span>
+          `;
+          categoryResults.append(row);
+        });
+    }
+
+    function submitQuiz(autoSubmitted = false) {
+      if (state.submitted) return;
+
+      const unansweredCards = highlightUnanswered();
+      if (!autoSubmitted && unansweredCards.length > 0) {
+        const proceed = window.confirm(`${unansweredCards.length} question(s) are unanswered. Submit anyway?`);
+        if (!proceed) {
+          unansweredCards[0].scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
+      }
+
+      state.submitted = true;
+      clearInterval(state.timerId);
+      let correct = 0;
+      let unanswered = 0;
+      const categoryStats = {};
+
+      state.questions.forEach((question, questionIndex) => {
+        const card = quizForm.querySelector(`[data-question-index="${questionIndex}"]`);
+        const selected = card.querySelector('input[type="radio"]:checked');
+        const labels = card.querySelectorAll(".option");
+
+        if (!categoryStats[question.category]) {
+          categoryStats[question.category] = { correct: 0, total: 0 };
+        }
+        categoryStats[question.category].total += 1;
+
+        labels.forEach((label) => {
+          const option = label.dataset.option;
+          if (option === question.answer) label.classList.add("correct");
+          if (selected && option === selected.value && selected.value !== question.answer) {
+            label.classList.add("incorrect");
+          }
+        });
+
+        if (!selected) {
+          unanswered += 1;
+        } else if (selected.value === question.answer) {
+          correct += 1;
+          categoryStats[question.category].correct += 1;
+        }
+
+        card.querySelectorAll("input").forEach((input) => { input.disabled = true; });
+        card.querySelector(".explanation").classList.add("show");
+      });
+
+      const incorrect = state.questions.length - correct - unanswered;
+      const percentage = Math.round((correct / state.questions.length) * 100);
+      const elapsed = QUIZ_SECONDS - state.secondsRemaining;
+      scoreText.textContent = `${percentage}%`;
+      scoreDetail.textContent = `${correct} of ${state.questions.length} correct`;
+      correctResult.textContent = String(correct);
+      incorrectResult.textContent = String(incorrect);
+      unansweredResult.textContent = String(unanswered);
+      timeUsedResult.textContent = formatTime(elapsed);
+
+      if (percentage >= 90) {
+        resultMessage.textContent = "Excellent — you can confidently use variables in practical Bash automation.";
+      } else if (percentage >= 80) {
+        resultMessage.textContent = "Passed — review the missed explanations and practise those variable features in small scripts.";
+      } else if (percentage >= 60) {
+        resultMessage.textContent = "Good progress — focus on your lowest topic score, test the examples in Bash, and reattempt.";
+      } else {
+        resultMessage.textContent = "Keep practising — begin with assignment, expansion, and quotes before moving to environment variables and advanced expansion.";
+      }
+
+      buildCategoryReport(categoryStats);
+      saveBestScore(percentage);
+      submitButton.disabled = true;
+      statusLabel.textContent = autoSubmitted ? "Time expired" : percentage >= 80 ? "Passed" : "Review required";
+      resultCard.classList.add("show");
+      reviewCard.classList.add("show");
+      resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    submitButton.addEventListener("click", () => submitQuiz(false));
+    reattemptButton.addEventListener("click", () => createAttempt(true));
+    loadSavedProgress();
+    createAttempt(false);
+  </script>
+</body>
+</html>

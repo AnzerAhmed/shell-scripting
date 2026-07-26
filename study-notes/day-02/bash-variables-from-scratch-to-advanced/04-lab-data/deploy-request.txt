@@ -1,0 +1,4 @@
+application=fruit-shop
+environment=testing
+owner=student
+change_ticket=LAB-1001

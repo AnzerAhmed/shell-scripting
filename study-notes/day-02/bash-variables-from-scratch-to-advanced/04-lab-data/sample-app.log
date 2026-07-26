@@ -1,0 +1,5 @@
+2026-07-25T09:00:00 INFO application started
+2026-07-25T09:02:14 INFO user login accepted
+2026-07-25T09:05:33 WARNING response time exceeded 500ms
+2026-07-25T09:06:19 ERROR database connection failed
+2026-07-25T09:07:02 INFO database connection restored

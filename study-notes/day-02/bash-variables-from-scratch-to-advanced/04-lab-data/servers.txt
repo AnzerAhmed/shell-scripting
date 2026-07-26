@@ -1,0 +1,3 @@
+web01.example.internal
+web02.example.internal
+db01.example.internal
