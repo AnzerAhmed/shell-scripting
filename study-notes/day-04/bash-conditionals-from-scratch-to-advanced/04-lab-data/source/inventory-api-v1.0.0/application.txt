@@ -1,0 +1,2 @@
+Inventory API practice artifact
+This is local classroom data. It does not deploy an application.
