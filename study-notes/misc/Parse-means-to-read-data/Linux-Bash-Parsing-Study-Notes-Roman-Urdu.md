@@ -80,7 +80,32 @@ Seedhi baat:
 
 ---
 
+## SORT:
+
+
+[`Sort` Explanation](./md/Linux-Sort-and-Parsing-Study-Notes.md)
+
+[`Sort` Explanation-roman-Urdu](./md/Linux-Sort-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+## Uniq
+
+[`Uniq` Explanation](./md/Linux-Uniq-and-Parsing-Study-Notes.md)
+
+[`Uniq` Explanation-roman-Urdu](./md/Linux-Uniq-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+## TR
+
+[`TR` Explanation](./md/Linux-TR-and-Parsing-Study-Notes.md)
+
+[`TR` Explanation-roman-Urdu](./md/Linux-TR-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+---
+
 ## 5. `grep` Ke Sath Parsing
+
+[`grep` Explanation](./md/Linux-Grep-and-Parsing-Study-Notes.md)
+
+[`grep` Explanation-roman-Urdu](./md/Linux-Grep-and-Parsing-Study-Notes-Roman-Urdu.md)
 
 `grep` kisi word ya pattern wali lines dhoondhta hai.
 
@@ -110,6 +135,10 @@ File mein hazaron lines ho sakti hain, lekin `grep` sirf woh lines nikalta hai j
 
 ## 6. `cut` Ke Sath Parsing
 
+[`Cut` Explanation](./md/Linux-Cut-and-Parsing-Study-Notes.md)
+
+[`Cut` Explanation-roman-Urdu](./md/Linux-Cut-and-Parsing-Study-Notes-Roman-Urdu.md)
+
 `/etc/passwd` file fields ko separate karne ke liye colon (`:`) use karti hai:
 
 ```text
@@ -133,6 +162,10 @@ Explanation:
 ---
 
 ## 7. `awk` Ke Sath Parsing
+
+[`AWK` Explanation](./md/Linux-AWK-and-Parsing-Study-Notes.md)
+
+[`awk` Explanation-roman-Urdu](./md/Linux-AWK-and-Parsing-Study-Notes-Roman-Urdu.md)
 
 Farz karen `servers.txt` mein yeh data hai:
 
@@ -178,6 +211,10 @@ web02
 
 ## 8. `sed` Ke Sath Parsing
 
+[`SED` Explanation](./md/Linux-SED-and-Parsing-Study-Notes.md)
+
+[`SED` Explanation-roman-Urdu](./md/Linux-SED-and-Parsing-Study-Notes-Roman-Urdu.md)
+
 `sed` text ko search aur transform kar sakta hai.
 
 Result dikhate waqt `error` ko `ERROR` se replace karne ke liye:
@@ -197,6 +234,10 @@ sed -n '/ERROR/p' application.log
 ---
 
 ## 9. `jq` Ke Sath JSON Parsing
+
+[`JQ-and-JSON` Explanation](./md/Linux-JQ-and-JSON-Parsing-Study-Notes.md)
+
+[`JQ-and-JSON` Explanation-roman-Urdu](./md/Linux-JQ-and-JSON-Parsing-Study-Notes-Roman-Urdu.md)
 
 Farz karen `server.json` mein yeh data hai:
 

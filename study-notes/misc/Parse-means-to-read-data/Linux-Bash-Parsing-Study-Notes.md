@@ -80,7 +80,32 @@ For a Linux Administrator, **parse logs and configurations** means:
 
 ---
 
+## SORT:
+
+
+[`Sort` Explanation](./md/Linux-Sort-and-Parsing-Study-Notes.md)
+
+[`Sort` Explanation-roman-Urdu](./md/Linux-Sort-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+## Uniq
+
+[`Uniq` Explanation](./md/Linux-Uniq-and-Parsing-Study-Notes.md)
+
+[`Uniq` Explanation-roman-Urdu](./md/Linux-Uniq-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+## TR
+
+[`TR` Explanation](./md/Linux-TR-and-Parsing-Study-Notes.md)
+
+[`TR` Explanation-roman-Urdu](./md/Linux-TR-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+---
+
 ## 5. Parsing with `grep`
+
+[`grep` Explanation](./md/Linux-Grep-and-Parsing-Study-Notes.md)
+
+[`grep` Explanation-roman-Urdu](./md/Linux-Grep-and-Parsing-Study-Notes-Roman-Urdu.md)
 
 `grep` finds lines containing a word or pattern.
 
@@ -110,6 +135,12 @@ The file may contain thousands of lines, but `grep` extracts only the lines you 
 
 ## 6. Parsing with `cut`
 
+[`Cut` Explanation](./md/Linux-Cut-and-Parsing-Study-Notes.md)
+
+[`Cut` Explanation-roman-Urdu](./md/Linux-Cut-and-Parsing-Study-Notes-Roman-Urdu.md)
+
+
+
 The `/etc/passwd` file uses a colon (`:`) as its field separator:
 
 ```text
@@ -133,6 +164,10 @@ Explanation:
 ---
 
 ## 7. Parsing with `awk`
+
+[`AWK` Explanation](./md/Linux-AWK-and-Parsing-Study-Notes.md)
+
+[`awk` Explanation-roman-Urdu](./md/Linux-AWK-and-Parsing-Study-Notes-Roman-Urdu.md)
 
 Suppose `servers.txt` contains:
 
@@ -178,6 +213,10 @@ web02
 
 ## 8. Parsing with `sed`
 
+[`SED` Explanation](./md/Linux-SED-and-Parsing-Study-Notes.md)
+
+[`sed` Explanation-roman-Urdu](./md/Linux-SED-and-Parsing-Study-Notes-Roman-Urdu.md)
+
 `sed` can search and transform text.
 
 Replace `error` with `ERROR` while displaying the result:
@@ -197,6 +236,10 @@ sed -n '/ERROR/p' application.log
 ---
 
 ## 9. Parsing JSON with `jq`
+
+[`JQ-and-JSON` Explanation](./md/Linux-JQ-and-JSON-Parsing-Study-Notes.md)
+
+[`jq` Explanation-roman-Urdu](./md/Linux-JQ-and-JSON-Parsing-Study-Notes-Roman-Urdu.md)
 
 Suppose `server.json` contains:
 
