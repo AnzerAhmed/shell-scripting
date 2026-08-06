@@ -1,25 +1,5 @@
 # WSL, Windows, and AWS EC2 Bidirectional File Transfer — Complete Study Notes
 
-## Suggested folder name
-
-```text
-aws-ec2-secure-file-transfer
-```
-
-Suggested structure:
-
-```text
-aws-ec2-secure-file-transfer/
-├── README.md
-├── notes/
-│   └── WSL-Windows-AWS-EC2-Bidirectional-File-Transfer-Study-Notes.md
-├── labs/
-├── scripts/
-└── examples/
-```
-
-The folder name is short, descriptive, lowercase, and suitable for a Git repository or Linux practice directory.
-
 ---
 
 ## Learning objectives
