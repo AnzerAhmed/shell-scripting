@@ -669,6 +669,10 @@ This asks Bash to exit after many unhandled command failures.
 
 It is not a replacement for clear error handling.
 
+['set -e' more information click here roman Urdu](./md/Shell_Scripting_Set_E_Roman_Urdu.md)
+
+['set -e' more information click here](./md/Shell_Scripting_Set_E_Study_Notes.md)
+
 ### Make directory creation repeatable
 
 ```bash
