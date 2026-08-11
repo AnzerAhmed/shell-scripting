@@ -356,8 +356,13 @@ Yaad rakhne ka rule:
 Error handling ka common pattern:
 
 ```bash
+source_file="abc.txt"
 if [[ ! -f "$source_file" ]]; then
     echo "Error: source file does not exist." >&2
     exit 1
 fi
 ```
+
+[For Explanation Click here in Urdu](md/Bash-Source-File-Validation-Roman-Urdu-Study-Notes.md)
+
+[For Explanation Click here](md/Bash-Source-File-Validation-Study-Notes.md)
