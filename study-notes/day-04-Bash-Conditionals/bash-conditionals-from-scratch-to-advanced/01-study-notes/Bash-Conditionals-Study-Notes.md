@@ -72,6 +72,8 @@ fi
 
 Example:
 
+**script name:** `basic_weather_if.sh`
+
 ```bash
 #!/bin/bash
 
@@ -125,6 +127,8 @@ fi
 
 ### Weather example
 
+**script name:** `weather_decision.sh`
+
 ```bash
 #!/bin/bash
 
@@ -159,6 +163,8 @@ fi
 
 ### Traffic-light example
 
+**script name:** `traffic_light.sh`
+
 ```bash
 #!/bin/bash
 
@@ -187,6 +193,8 @@ Bash checks conditions from top to bottom. After finding the first true conditio
 The previous script does not treat `RED` and `red` as equal.
 
 Bash can convert text to lowercase:
+
+**script name:** `case_insensitive_traffic_light.sh`
 
 ```bash
 read -r -p "Enter traffic-light color: " light
@@ -329,6 +337,8 @@ fi
 
 ### Empty input
 
+**script name:** `validate_name_input.sh`
+
 ```bash
 read -r -p "Enter your name: " name
 
@@ -375,6 +385,8 @@ With `[ ]` or `[[ ]]`, use numeric operators:
 
 ### Age example
 
+**script name:** `age_classifier.sh`
+
 ```bash
 #!/bin/bash
 
@@ -388,6 +400,8 @@ fi
 ```
 
 ### Grade example
+
+**script name:** `grade_classifier.sh`
 
 ```bash
 #!/bin/bash
@@ -414,6 +428,8 @@ Test the highest value first. For example, a score of `95` also satisfies `-ge 8
 ## 10. Validate numeric input
 
 Entering text such as `abc` when a number is expected can produce errors or incorrect decisions.
+
+**script name:** `validate_age.sh`
 
 ```bash
 read -r -p "Enter your age: " age
@@ -453,6 +469,8 @@ For numeric calculations, Bash provides arithmetic evaluation:
 
 Example:
 
+**script name:** `arithmetic_age_check.sh`
+
 ```bash
 age=20
 
@@ -468,6 +486,8 @@ Inside `(( ))`:
 - Use `==`, `!=`, `>`, `>=`, `<`, and `<=`
 - Variable names normally do not need `$`
 - Logical `&&` and `||` are supported
+
+**script name:** `grade_b_range_check.sh`
 
 ```bash
 marks=85
@@ -506,6 +526,8 @@ Both of these are valid:
 
 ### Regular-file check
 
+**script name:** `regular_file_checker.sh`
+
 ```bash
 file="/etc/passwd"
 
@@ -518,6 +540,8 @@ fi
 
 ### Directory check
 
+**script name:** `directory_checker.sh`
+
 ```bash
 directory="/var/log"
 
@@ -529,6 +553,8 @@ fi
 ```
 
 ### Missing, empty, and valid file
+
+**script name:** `file_content_checker.sh`
 
 ```bash
 file="homework.txt"
@@ -548,6 +574,8 @@ fi
 
 `&&` means **AND**. Both conditions must be true.
 
+**script name:** `age_country_eligibility.sh`
+
 ```bash
 age=25
 country="USA"
@@ -558,6 +586,8 @@ fi
 ```
 
 Real file example:
+
+**script name:** `readable_file_checker.sh`
 
 ```bash
 file="application.log"
@@ -575,6 +605,8 @@ fi
 
 `||` means **OR**. At least one condition must be true.
 
+**script name:** `role_access_checker.sh`
+
 ```bash
 role="admin"
 
@@ -590,6 +622,8 @@ fi
 ## 15. Reverse a condition with `!`
 
 `!` means **NOT**.
+
+**script name:** `missing_config_checker.sh`
 
 ```bash
 file="config.txt"
@@ -610,6 +644,8 @@ If config.txt is not a regular file
 ## 16. Group complex conditions
 
 Use parentheses inside `[[ ]]` to make complex logic clear:
+
+**script name:** `environment_role_access.sh`
 
 ```bash
 if [[ "$environment" = "dev" && ( "$role" = "admin" || "$role" = "devops" ) ]]; then
@@ -633,6 +669,8 @@ The role must be admin OR devops
 
 Every Linux command returns an exit status. A command can therefore be placed directly after `if`.
 
+**script name:** `student_search.sh`
+
 ```bash
 if grep -q "Ali" students.txt; then
     echo "Ali was found"
@@ -644,6 +682,8 @@ fi
 `grep -q` stays quiet and communicates the result through its exit status.
 
 Another example:
+
+**script name:** `prepare_reports_directory.sh`
 
 ```bash
 if mkdir -p reports; then
@@ -676,6 +716,8 @@ Testing the command directly avoids accidentally replacing `$?` with the status 
 ---
 
 ## 18. Conditional based on script arguments
+
+**script name:** `check-file.sh`
 
 ```bash
 #!/bin/bash
@@ -714,6 +756,8 @@ echo "$?"
 
 Inside `[[ ]]`, Bash supports wildcard patterns.
 
+**script name:** `log_file_detector.sh`
+
 ```bash
 filename="application.log"
 
@@ -730,6 +774,8 @@ Quote the variable, but do not quote the pattern:
 
 Another example:
 
+**script name:** `production_environment_detector.sh`
+
 ```bash
 environment="production-east"
 
@@ -743,6 +789,8 @@ fi
 ## 20. Regular-expression matching
 
 Bash uses `=~` for regular expressions.
+
+**script name:** `username_validator.sh`
 
 ```bash
 username="ali123"
@@ -772,6 +820,8 @@ Do not quote the regular expression:
 
 A conditional can be placed inside another conditional.
 
+**script name:** `nested_file_checker.sh`
+
 ```bash
 if [[ -f "$file" ]]; then
     if [[ -s "$file" ]]; then
@@ -791,6 +841,8 @@ Nested conditions can be useful, but too many levels make scripts difficult to r
 ## 22. `case` as an alternative
 
 When one value is compared against many fixed choices, `case` may be clearer than many `elif` blocks.
+
+**script name:** `traffic_light_case.sh`
 
 ```bash
 #!/bin/bash
@@ -823,6 +875,8 @@ Use `if/elif/else` for different or complex conditions. Use `case` when matching
 ## 23. Real DevOps example: deployment preflight
 
 This script validates its arguments, environment name, configuration file, file content, and read permission before approving a deployment.
+
+**script name:** `deployment-preflight.sh`
 
 ```bash
 #!/bin/bash
