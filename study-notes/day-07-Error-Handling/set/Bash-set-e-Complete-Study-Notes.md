@@ -93,6 +93,8 @@ exit 0
 
 This terminates the complete script and reports successful completion.
 
+Create:  `successful_backup.sh`
+
 ```bash
 #!/bin/bash
 
@@ -107,6 +109,8 @@ exit 1
 ```
 
 This terminates the complete script and reports general failure.
+
+Create:  `source_file_check.sh`
 
 ```bash
 #!/bin/bash
@@ -123,6 +127,8 @@ exit 0
 ```
 
 ### Custom statuses
+
+Create:  `directory_argument_validator.sh`
 
 ```bash
 #!/bin/bash
@@ -152,6 +158,8 @@ Document custom meanings in the script help or README. Exit statuses are represe
 
 ### Help is usually successful
 
+Create:  `help_option_demo.sh`
+
 ```bash
 if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
     echo "Usage: $0 SOURCE DESTINATION"
@@ -161,6 +169,8 @@ fi
 
 When usage is displayed because required input is missing, failure is more appropriate:
 
+Create:  `required_arguments_check.sh`
+
 ```bash
 if (( $# != 2 )); then
     echo "Usage: $0 SOURCE DESTINATION" >&2
@@ -169,6 +179,8 @@ fi
 ```
 
 ### Commands after `exit` do not run
+
+Create:  `exit_stops_execution.sh`
 
 ```bash
 echo "Before exit"
@@ -181,6 +193,8 @@ Only `Before exit` is printed.
 ### No explicit `exit`
 
 If a script reaches its end, its status is normally the status of the last command that ran.
+
+Create:  `implicit_exit_status.sh`
 
 ```bash
 #!/bin/bash
@@ -224,6 +238,8 @@ echo "Backup status: $status"
 
 A direct conditional is often cleaner:
 
+Create:  `backup_status_check.sh`
+
 ```bash
 if bash backup.sh; then
     echo "The backup script succeeded."
@@ -264,6 +280,8 @@ It does not catch every possible failure, explain which business operation faile
 
 ### Without `set -e`
 
+Create:  `copy_without_errexit.sh`
+
 ```bash
 #!/bin/bash
 
@@ -284,6 +302,8 @@ Bash continues even though the copy failed. A later message might create a false
 
 ### With `set -e`
 
+Create:  `copy_with_errexit.sh`
+
 ```bash
 #!/bin/bash
 
@@ -297,6 +317,8 @@ echo "After copy"
 If `cp` fails as a simple, unhandled command, Bash terminates before the final `echo`.
 
 ### Why it can improve safety
+
+Create:  `safe_project_directory.sh`
 
 ```bash
 #!/bin/bash
@@ -317,6 +339,8 @@ If `cd` fails, the script stops before creating the file in the wrong directory.
 
 ### 7.1 Command tested by `if`
 
+Create:  `conditional_copy_check.sh`
+
 ```bash
 if cp -- "$source" "$destination"; then
     echo "Copy completed."
@@ -329,6 +353,8 @@ fi
 
 ### 7.2 Command inverted with `!`
 
+Create:  `negated_directory_creation.sh`
+
 ```bash
 if ! mkdir "$directory"; then
     echo "Error: directory could not be created." >&2
@@ -338,6 +364,8 @@ fi
 `!` reverses success and failure, and `if` handles the resulting condition.
 
 ### 7.3 Commands in an OR list
+
+Create:  `mkdir_or_message.sh`
 
 ```bash
 mkdir "$directory" || echo "Directory creation failed." >&2
@@ -349,6 +377,8 @@ In an AND/OR list, a non-final command's status is being used for control flow. 
 
 For a required operation, explicitly terminate:
 
+Create:  `required_directory_creation.sh`
+
 ```bash
 mkdir "$directory" || {
     echo "Error: directory could not be created." >&2
@@ -357,6 +387,8 @@ mkdir "$directory" || {
 ```
 
 ### 7.4 Commands in an AND list
+
+Create:  `mkdir_and_success_message.sh`
 
 ```bash
 mkdir "$directory" && echo "Directory created."
@@ -367,6 +399,8 @@ The first status controls whether the second command runs. `set -e` behavior ins
 ### 7.5 Loop conditions
 
 Commands tested by `while` or `until` are expected to become nonzero when the loop should stop.
+
+Create:  `read_input_lines.sh`
 
 ```bash
 while read -r line
@@ -405,6 +439,8 @@ set -o pipefail
 
 With `pipefail`, a pipeline returns a nonzero status when any component fails. More precisely, it returns the status of the rightmost failed component, or `0` when all components succeed.
 
+Create:  `pipeline_failure_demo.sh`
+
 ```bash
 #!/bin/bash
 
@@ -418,6 +454,8 @@ echo "Pipeline completed."
 If `grep` cannot open the file, the pipeline returns nonzero and the final message does not run.
 
 ### Inspect every component with `PIPESTATUS`
+
+Create:  `pipeline_status_report.sh`
 
 ```bash
 grep "ERROR" application.log | sort | uniq
@@ -443,6 +481,8 @@ Not every nonzero status should stop a script.
 | `0` | At least one match was found. |
 | `1` | No match was found. |
 | Greater than `1` | An actual processing error occurred. |
+
+Create:  `grep_status_handler.sh`
 
 ```bash
 if grep -q "ERROR" application.log; then
@@ -488,6 +528,8 @@ source_file="$1"
 
 Use a safe default and validate it:
 
+Create:  `source_argument_validator.sh`
+
 ```bash
 source_file="${1:-}"
 
@@ -505,6 +547,8 @@ Strict options improve failure visibility, but each option has exceptions and si
 
 ### Automatic termination only
 
+Create:  `automatic_copy_failure.sh`
+
 ```bash
 set -e
 cp -- "$source" "$destination"
@@ -513,6 +557,8 @@ cp -- "$source" "$destination"
 This may stop the script, but it does not provide application-specific context.
 
 ### Clear handling with `if`
+
+Create:  `explicit_copy_error_handler.sh`
 
 ```bash
 if cp -- "$source" "$destination"; then
@@ -552,6 +598,8 @@ echo "Error: backup failed." >&2
 
 ### Important detail about `if ! command`
 
+Create:  `negated_copy_check.sh`
+
 ```bash
 if ! cp -- "$source" "$destination"; then
     echo "Error: backup failed." >&2
@@ -562,6 +610,8 @@ fi
 This is useful when only success or failure matters. But `$?` inside the `then` block does not preserve the original `cp` failure status because `!` inverted it.
 
 When the original status matters, use `if/else`:
+
+Create:  `preserve_copy_status.sh`
 
 ```bash
 if cp -- "$source" "$destination"; then
@@ -589,6 +639,8 @@ The practical difference is:
 | `exit 1` | Yes | Yes | Failure |
 
 ### Reusable function
+
+Create:  `reusable_file_check.sh`
 
 ```bash
 check_file()
@@ -630,6 +682,8 @@ Normally, `return` is used inside a function. It may also be used in a sourced f
 
 Use explicit statuses inside reusable functions:
 
+Create:  `backup_function_demo.sh`
+
 ```bash
 create_backup()
 {
@@ -670,6 +724,8 @@ result=$(some_command)
 
 The behavior of `errexit` inside command substitution can depend on Bash mode and the `inherit_errexit` setting. Handle a critical substitution explicitly:
 
+Create:  `command_substitution_handler.sh`
+
 ```bash
 if result=$(some_command); then
     echo "Result: $result"
@@ -685,6 +741,8 @@ This makes the intended behavior clear without depending on option-inheritance d
 ### Subshell
 
 Commands inside parentheses run in a subshell:
+
+Create:  `subshell_errexit_demo.sh`
 
 ```bash
 (
@@ -702,6 +760,8 @@ The option and directory changes are limited to that subshell. The parent shell 
 
 ### `ERR` trap for diagnostics
 
+Create:  `err_trap_diagnostics.sh`
+
 ```bash
 set -Eeuo pipefail
 
@@ -718,6 +778,8 @@ Important limitations:
 - Complex trap commands should be tested carefully.
 
 ### `EXIT` trap for cleanup
+
+Create:  `temporary_file_cleanup.sh`
 
 ```bash
 temp_file=""
@@ -737,6 +799,8 @@ temp_file=$(mktemp)
 The `EXIT` trap runs when the shell exits normally or after most script failures. It is useful for temporary files, locks, and other resources that must be removed.
 
 ### Preserve the original status during cleanup
+
+Create:  `cleanup_preserve_status.sh`
 
 ```bash
 cleanup()
@@ -777,6 +841,8 @@ set -e
 
 Example:
 
+Create:  `temporary_errexit_disable.sh`
+
 ```bash
 set +e
 some_command_that_may_fail
@@ -787,6 +853,8 @@ echo "Command status: $status"
 ```
 
 This can be fragile if the script forgets to re-enable the option. An explicit conditional is normally clearer:
+
+Create:  `expected_failure_handler.sh`
 
 ```bash
 if some_command_that_may_fail; then
@@ -801,7 +869,7 @@ fi
 
 ## 17. Complete Safe Backup Script
 
-Create `safe_backup.sh`:
+Script name: `safe_backup.sh`
 
 ```bash
 #!/bin/bash
@@ -1000,6 +1068,8 @@ Create `set_e_demo.sh` that:
 9. Returns `exit 0` after a valid search.
 
 ### Suggested solution
+
+Script name: `set_e_demo.sh`
 
 ```bash
 #!/bin/bash
