@@ -93,7 +93,7 @@ exit 0
 
 Yeh poori script terminate karke successful completion report karta hai.
 
-Suggested script name: `successful_backup.sh`
+Create `successful_backup.sh`
 
 ```bash
 #!/bin/bash
@@ -110,7 +110,7 @@ exit 1
 
 Yeh poori script terminate karke general failure report karta hai.
 
-Suggested script name: `source_file_check.sh`
+Create `source_file_check.sh`
 
 ```bash
 #!/bin/bash
@@ -128,7 +128,7 @@ exit 0
 
 ### Custom statuses
 
-Suggested script name: `directory_argument_validator.sh`
+Create `directory_argument_validator.sh`
 
 ```bash
 #!/bin/bash
@@ -158,7 +158,7 @@ Custom meanings ko script help ya README mein document karein. Exit status ki ra
 
 ### Help request aam tor par success hoti hai
 
-Suggested script name: `help_option_demo.sh`
+Create `help_option_demo.sh`
 
 ```bash
 if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
@@ -169,7 +169,7 @@ fi
 
 Agar usage missing required input ki wajah se dikhayi ja rahi ho to failure zyada munasib hai:
 
-Suggested script name: `required_arguments_check.sh`
+Create `required_arguments_check.sh`
 
 ```bash
 if (( $# != 2 )); then
@@ -180,7 +180,7 @@ fi
 
 ### `exit` ke baad wali commands nahi chaltin
 
-Suggested script name: `exit_stops_execution.sh`
+Create `exit_stops_execution.sh`
 
 ```bash
 echo "Before exit"
@@ -194,7 +194,7 @@ Sirf `Before exit` print hoga.
 
 Script end tak pohanch jaye to aam tor par uska status aakhri executed command ka status hota hai.
 
-Suggested script name: `implicit_exit_status.sh`
+Create `implicit_exit_status.sh`
 
 ```bash
 #!/bin/bash
@@ -238,7 +238,7 @@ echo "Backup status: $status"
 
 Command ko directly test karna aksar zyada clean hota hai:
 
-Suggested script name: `backup_status_check.sh`
+Create `backup_status_check.sh`
 
 ```bash
 if bash backup.sh; then
@@ -280,7 +280,7 @@ Zyada accurate definition:
 
 ### `set -e` ke baghair
 
-Suggested script name: `copy_without_errexit.sh`
+Create `copy_without_errexit.sh`
 
 ```bash
 #!/bin/bash
@@ -302,7 +302,7 @@ Copy fail honay ke bawajood Bash agla command chala deta hai. Is se false succes
 
 ### `set -e` ke sath
 
-Suggested script name: `copy_with_errexit.sh`
+Create `copy_with_errexit.sh`
 
 ```bash
 #!/bin/bash
@@ -318,7 +318,7 @@ Agar `cp` simple aur unhandled command ke tor par fail ho to Bash final `echo` s
 
 ### Safety mein madad
 
-Suggested script name: `safe_project_directory.sh`
+Create `safe_project_directory.sh`
 
 ```bash
 #!/bin/bash
@@ -339,7 +339,7 @@ Jab command ka status decision, inversion ya control flow ke liye use ho raha ho
 
 ### 7.1 `if` ke andar tested command
 
-Suggested script name: `conditional_copy_check.sh`
+Create `conditional_copy_check.sh`
 
 ```bash
 if cp -- "$source" "$destination"; then
@@ -353,7 +353,7 @@ fi
 
 ### 7.2 `!` se inverted command
 
-Suggested script name: `negated_directory_creation.sh`
+Create `negated_directory_creation.sh`
 
 ```bash
 if ! mkdir "$directory"; then
@@ -365,7 +365,7 @@ fi
 
 ### 7.3 OR list
 
-Suggested script name: `mkdir_or_message.sh`
+Create `mkdir_or_message.sh`
 
 ```bash
 mkdir "$directory" || echo "Directory creation failed." >&2
@@ -375,7 +375,7 @@ Left command ki failure decide karti hai ke right command chalna chahiye ya nahi
 
 Required operation ke liye explicitly exit karein:
 
-Suggested script name: `required_directory_creation.sh`
+Create `required_directory_creation.sh`
 
 ```bash
 mkdir "$directory" || {
@@ -388,7 +388,7 @@ AND/OR list mein non-final command ka status control flow ke liye use hota hai. 
 
 ### 7.4 AND list
 
-Suggested script name: `mkdir_and_success_message.sh`
+Create `mkdir_and_success_message.sh`
 
 ```bash
 mkdir "$directory" && echo "Directory created."
@@ -400,7 +400,7 @@ Pehla status decide karta hai ke doosra command chalega ya nahi. Complex workflo
 
 `while` aur `until` ki condition mein command ka nonzero hona loop ko stop karne ke liye normal ho sakta hai.
 
-Suggested script name: `read_input_lines.sh`
+Create `read_input_lines.sh`
 
 ```bash
 while read -r line
@@ -441,7 +441,7 @@ set -o pipefail
 
 [for log file w/ERROR click here](../data/application_noerror.log)
 
-Suggested script name: `count_error_lines.sh`
+Create `count_error_lines.sh`
 
 ```bash
 #!/bin/bash
@@ -462,7 +462,7 @@ Agar `grep` file open na kar sakay to final message nahi chalega.
 
 ### `PIPESTATUS` se har component check karein
 
-Suggested script name: `pipeline_status_report.sh`
+Create `pipeline_status_report.sh`
 
 ```bash
 grep "ERROR" application.log | sort | uniq
@@ -489,7 +489,7 @@ Har nonzero status par script ko stop nahi hona chahiye.
 | `1` | Koi match nahi mila. |
 | `1` se bara | Processing error hua. |
 
-Suggested script name: `grep_status_handler.sh`
+Create `grep_status_handler.sh`
 
 ```bash
 if grep -q "ERROR" application.log; then
@@ -535,7 +535,7 @@ source_file="$1"
 
 Safe default aur validation use karein:
 
-Suggested script name: `source_argument_validator.sh`
+Create `source_argument_validator.sh`
 
 ```bash
 source_file="${1:-}"
@@ -554,7 +554,7 @@ Strict options failure visibility improve karti hain, lekin har option ki except
 
 ### Sirf automatic termination
 
-Suggested script name: `automatic_copy_failure.sh`
+Create `automatic_copy_failure.sh`
 
 ```bash
 set -e
@@ -565,7 +565,7 @@ Yeh script ko rok sakta hai lekin operation-specific context nahi deta.
 
 ### `if` ke sath clear handling
 
-Suggested script name: `explicit_copy_error_handler.sh`
+Create `explicit_copy_error_handler.sh`
 
 ```bash
 if cp -- "$source" "$destination"; then
@@ -605,7 +605,7 @@ echo "Error: backup failed." >&2
 
 ### `if ! command` ki aham detail
 
-Suggested script name: `negated_copy_check.sh`
+Create `negated_copy_check.sh`
 
 ```bash
 if ! cp -- "$source" "$destination"; then
@@ -618,7 +618,7 @@ Jab sirf success ya failure matter karti ho to yeh useful hai. Lekin `then` bloc
 
 Original status chahiye ho to `if/else` use karein:
 
-Suggested script name: `preserve_copy_status.sh`
+Create `preserve_copy_status.sh`
 
 ```bash
 if cp -- "$source" "$destination"; then
@@ -647,7 +647,7 @@ Practical farq:
 
 ### Reusable function
 
-Suggested script name: `reusable_file_check.sh`
+Create `reusable_file_check.sh`
 
 ```bash
 check_file()
@@ -689,7 +689,7 @@ Jab function conditional context mein call ho to `set -e` ka behavior zyada subt
 
 Reusable function mein clear status return karein:
 
-Suggested script name: `backup_function_demo.sh`
+Create `backup_function_demo.sh`
 
 ```bash
 create_backup()
@@ -731,7 +731,7 @@ result=$(some_command)
 
 Command substitution ke andar `errexit` behavior Bash mode aur `inherit_errexit` setting par depend kar sakta hai. Critical substitution ko explicitly handle karein:
 
-Suggested script name: `command_substitution_handler.sh`
+Create `command_substitution_handler.sh`
 
 ```bash
 if result=$(some_command); then
@@ -749,7 +749,7 @@ Is se intended behavior clear rehta hai aur subtle inheritance rules par depend 
 
 Parentheses ke andar commands subshell mein chalti hain:
 
-Suggested script name: `subshell_errexit_demo.sh`
+Create `subshell_errexit_demo.sh`
 
 ```bash
 (
@@ -771,7 +771,7 @@ Option aur directory changes usi subshell tak mehdood rehtay hain. Parent shell 
 
 ### Diagnostics ke liye `ERR` trap
 
-Suggested script name: `err_trap_diagnostics.sh`
+Create `err_trap_diagnostics.sh`
 
 ```bash
 set -Eeuo pipefail
@@ -790,7 +790,7 @@ Aham limitations:
 
 ### Cleanup ke liye `EXIT` trap
 
-Suggested script name: `temporary_file_cleanup.sh`
+Create `temporary_file_cleanup.sh`
 
 ```bash
 temp_file=""
@@ -811,7 +811,7 @@ temp_file=$(mktemp)
 
 ### Cleanup mein original status preserve karna
 
-Suggested script name: `cleanup_preserve_status.sh`
+Create `cleanup_preserve_status.sh`
 
 ```bash
 cleanup()
@@ -852,7 +852,7 @@ set -e
 
 Misaal:
 
-Suggested script name: `temporary_errexit_disable.sh`
+Create `temporary_errexit_disable.sh`
 
 ```bash
 set +e
@@ -865,7 +865,7 @@ echo "Command status: $status"
 
 Agar script option dobara enable karna bhool jaye to yeh fragile ho sakta hai. Explicit conditional aam tor par zyada clear hota hai:
 
-Suggested script name: `expected_failure_handler.sh`
+Create `expected_failure_handler.sh`
 
 ```bash
 if some_command_that_may_fail; then
