@@ -1,0 +1,11 @@
+mkdir 
+cd 
+touch  
+echo 
+cp 
+mv 
+ls
+ls -l
+cat 
+pwd
+cd ..

@@ -1,0 +1,18 @@
+Successful command:
+ls /tmp
+
+Exit status:
+0
+
+Meaning:
+The command completed successfully
+
+
+Failing command:
+cd /missing
+
+Exit status:
+1
+
+Meaning:
+The command failed because the directory does not exist

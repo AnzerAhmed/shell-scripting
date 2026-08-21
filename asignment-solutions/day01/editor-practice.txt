@@ -1,0 +1,10 @@
+#!/bin/bash
+#this is editor practice script
+echo "===================================================="
+echo "Today I created and edited my first Linux text file."
+echo "===================================================="
+
+echo "My Name is:Anzer Ahmed"
+echo "My Editor is:vim"
+echo "My Shell is :bash"
+

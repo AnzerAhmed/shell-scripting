@@ -1,0 +1,2 @@
+uid=1004(student02) gid=1004(student02) groups=1004(student02)
+student02:x:1004:1004::/home/student02:/bin/bash
